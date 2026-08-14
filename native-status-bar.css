@@ -28,13 +28,13 @@ html {
   html,
   body {
     width: 100%;
-    min-height: 100dvh;
+    min-height: 100lvh;
     background: #f9f7f5;
   }
 
   #air2-phone-shell {
     top: 0 !important;
-    min-height: 100dvh;
+    min-height: 100lvh;
   }
 
   #demo,
