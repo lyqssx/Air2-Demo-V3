@@ -1,125 +1,15 @@
-/*
- * The demo is presented on a real phone, whose native status bar already
- * provides the time, cellular, Wi-Fi, and battery indicators.
- */
-.status,
-.v4-status,
-.d4-status {
-  display: none !important;
-}
+.status,.v4-status,.d4-status{display:none!important}
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#f9f7f5}
 
-/* Full-bleed iOS safe-area presentation. The native status bar remains
-   visible while the active screen background continues underneath it. */
-html,
-body,
-#air2-phone-shell,
-#demo {
-  max-width: 100%;
-}
-
-html {
-  --air2-safe-top: env(safe-area-inset-top, 0px);
-  --air2-safe-right: env(safe-area-inset-right, 0px);
-  --air2-safe-bottom: env(safe-area-inset-bottom, 0px);
-  --air2-safe-left: env(safe-area-inset-left, 0px);
-}
-
-@media (max-width: 600px) {
-  html,
-  body {
-    width: 100%;
-    min-height: 100lvh;
-    background: #f9f7f5;
-  }
-
-  #air2-phone-shell {
-    top: 0 !important;
-    min-height: 100lvh;
-  }
-
-  #demo,
-  #demo > .v4,
-  #demo > .screen,
-  #demo > .d4-device {
-    min-height: 100%;
-  }
-
-  /* Home owns the status-bar backdrop, so its pink wash is continuous. */
-  #demo > .v4-home {
-    background: linear-gradient(180deg,#ffd9e0 0,#f9f7f5 33%) !important;
-  }
-
-  /* Fixed bottom surfaces must paint through the home-indicator safe area. */
-  #demo .v4-home-dock,
-  #demo .h7-home-dock,
-  #demo .home-dock {
-    padding-bottom: var(--air2-safe-bottom) !important;
-    height: calc(166px + var(--air2-safe-bottom)) !important;
-  }
-
-  #demo .v4-nav,
-  #demo .d4-nav {
-    bottom: max(18px, calc(var(--air2-safe-bottom) + 8px)) !important;
-  }
-
-  #demo .v4-control > .v4-start,
-  #demo .v4-control > .v4-actions {
-    bottom: max(25px, calc(var(--air2-safe-bottom) + 8px)) !important;
-  }
-
-  #demo .v4-log,
-  #demo .v4-logged,
-  #demo .r2-log,
-  #demo .v4-overlay {
-    padding-bottom: var(--air2-safe-bottom) !important;
-  }
-}
-
-/* Installed iOS Home Screen Web App: use one fixed, full-screen containing
-   block. Native status and home-indicator areas are part of this canvas. */
-@media (max-width: 600px) {
-  html.air2-standalone,
-  html.air2-standalone body,
-  html.air2-standalone #air2-phone-shell {
-    width: 100vw !important;
-    height: 100% !important;
-    min-height: 100% !important;
-    overflow: hidden !important;
-  }
-
-  html.air2-standalone #air2-phone-shell {
-    position: fixed !important;
-    inset: 0 !important;
-  }
-
-  html.air2-standalone #demo {
-    transform: none !important;
-    transform-origin: top left !important;
-  }
-
-  /* WebKit standalone + viewport-fit bug: absolute bottom:0 may resolve above
-     the physical bottom. Fixed positioning uses the actual screen edge. */
-  html.air2-standalone #demo .v4-home-dock,
-  html.air2-standalone #demo .h7-home-dock,
-  html.air2-standalone #demo .home-dock {
-    position: fixed !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    left: 0 !important;
-  }
-
-  html.air2-standalone #demo .v4-nav,
-  html.air2-standalone #demo .d4-nav {
-    position: fixed !important;
-    bottom: 0 !important;
-    height: calc(63px + env(safe-area-inset-bottom, 0px)) !important;
-    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
-    border-radius: 31px 31px 0 0 !important;
-  }
-
-  html.air2-standalone #demo .v4-control > .v4-start,
-  html.air2-standalone #demo .v4-control > .v4-actions {
-    position: fixed !important;
-    bottom: max(8px, env(safe-area-inset-bottom, 0px)) !important;
-  }
+/* Mobile owns the real viewport. No scale, zoom, height fitting, synthetic
+   safe-area height, or background cover layer. */
+@media (max-width:600px){
+  html,body{position:fixed;inset:0;width:100%;height:100%;min-height:0;overflow:hidden}
+  #air2-phone-shell{position:fixed!important;inset:0!important;width:100%!important;height:100%!important;margin:0!important;overflow:hidden!important;transform:none!important}
+  #demo{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;overflow:hidden!important;transform:none!important}
+  #demo>.v4,#demo>.screen,#demo>.d4-device{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important}
+  #demo .d4-card,#demo .v4-device-card{right:16px!important;left:16px!important;width:auto!important}
+  #demo .v4-home-dock,#demo .h7-home-dock,#demo .home-dock{position:absolute!important;right:0!important;bottom:0!important;left:0!important}
+  #demo .v4-nav,#demo .d4-nav{position:absolute!important;bottom:18px!important}
+  #demo .v4-control>.v4-start,#demo .v4-control>.v4-actions{position:absolute!important;bottom:25px!important}
 }

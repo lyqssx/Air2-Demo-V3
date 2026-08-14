@@ -2,66 +2,37 @@
   var designWidth = 402, designHeight = 874;
   var demo = document.getElementById('demo');
   if (!demo || demo.parentElement.id === 'air2-phone-shell') return;
+
   var shell = document.createElement('main');
   shell.id = 'air2-phone-shell';
   demo.parentNode.insertBefore(shell, demo);
   shell.appendChild(demo);
-  var largeViewportProbe = document.createElement('i');
-  largeViewportProbe.setAttribute('aria-hidden', 'true');
-  largeViewportProbe.style.cssText = 'position:fixed;inset:auto 0 0;height:100lvh;visibility:hidden;pointer-events:none';
-  document.body.appendChild(largeViewportProbe);
-  var standaloneViewportProbe = document.createElement('i');
-  standaloneViewportProbe.setAttribute('aria-hidden', 'true');
-  standaloneViewportProbe.style.cssText = 'position:fixed;inset:auto 0 0;height:100vh;visibility:hidden;pointer-events:none';
-  document.body.appendChild(standaloneViewportProbe);
-  function viewportSize() {
-    var viewport = window.visualViewport;
-    var standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-    var safeBottom = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--air2-safe-bottom')) || 0;
-    var visualHeight = viewport ? viewport.height + viewport.offsetTop : 0;
-    var largeViewportHeight = largeViewportProbe.getBoundingClientRect().height || 0;
-    /* WebKit bug 254868: in installed apps with viewport-fit=cover, svh,
-       dvh and visualViewport can exclude the safe areas. Traditional 100vh
-       is the documented working fallback for standalone mode. */
-    var standaloneHeight = standalone ? Math.max(window.innerHeight || 0, document.documentElement.clientHeight || 0) : 0;
-    return {
-      width: viewport ? viewport.width : window.innerWidth,
-      /* visualViewport can exclude the iOS bottom safe area after
-         viewport-fit=cover. Use the largest available layout measurement and
-         explicitly include the safe inset so the bottom dock is not clipped. */
-      height: standalone ? standaloneHeight : Math.max(largeViewportHeight, visualHeight + safeBottom, window.innerHeight || 0, document.documentElement.clientHeight || 0)
-    };
+
+  function isStandalone() {
+    return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
   }
-  function resizePhone() {
-    var viewport = viewportSize();
-    var standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-    document.documentElement.classList.toggle('air2-standalone', standalone);
-    var isPhone = viewport.width <= 600;
-    var scale = isPhone
-      ? viewport.width / designWidth
-      : Math.min(viewport.width / designWidth, viewport.height / designHeight);
-    scale = Math.max(.1, scale);
-    /* A transformed ancestor traps position:fixed descendants in WebKit.
-       Installed mode therefore uses layout zoom instead of transform scaling,
-       allowing the bottom dock/nav to attach to the real screen viewport. */
-    if (standalone && isPhone) {
-      shell.style.setProperty('--air2-scale', '1');
-      demo.style.transform = 'none';
-      demo.style.zoom = String(scale);
-    } else {
-      shell.style.setProperty('--air2-scale', String(scale));
-      demo.style.transform = '';
-      demo.style.zoom = '';
+
+  function layout() {
+    var phone = window.innerWidth <= 600;
+    document.documentElement.classList.toggle('air2-standalone', isStandalone());
+    shell.dataset.displayMode = isStandalone() ? 'standalone' : 'browser';
+
+    if (phone) {
+      shell.style.removeProperty('--air2-scale');
+      shell.style.removeProperty('--air2-shell-width');
+      shell.style.removeProperty('--air2-shell-height');
+      shell.style.removeProperty('--air2-canvas-height');
+      return;
     }
-    shell.style.setProperty('--air2-shell-width', (isPhone ? viewport.width : designWidth * scale) + 'px');
-    shell.style.setProperty('--air2-shell-height', (isPhone ? viewport.height : designHeight * scale) + 'px');
-    /* On phones, preserve the 402px design width while extending the logical
-       canvas to exactly the visible browser height. */
-    shell.style.setProperty('--air2-canvas-height', (isPhone ? viewport.height / scale : designHeight) + 'px');
-    shell.dataset.displayMode = standalone ? 'standalone' : 'browser';
+
+    var scale = Math.max(.1, Math.min(window.innerWidth / designWidth, window.innerHeight / designHeight));
+    shell.style.setProperty('--air2-scale', String(scale));
+    shell.style.setProperty('--air2-shell-width', (designWidth * scale) + 'px');
+    shell.style.setProperty('--air2-shell-height', (designHeight * scale) + 'px');
+    shell.style.setProperty('--air2-canvas-height', designHeight + 'px');
   }
-  resizePhone();
-  window.addEventListener('resize', resizePhone, {passive:true});
-  window.addEventListener('orientationchange', resizePhone, {passive:true});
-  if (window.visualViewport) window.visualViewport.addEventListener('resize', resizePhone, {passive:true});
-})();
+
+  layout();
+  window.addEventListener('resize', layout, {passive:true});
+  window.addEventListener('orientationchange', layout, {passive:true});
+}());

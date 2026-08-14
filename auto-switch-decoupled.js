@@ -20,6 +20,8 @@
     var page = document.querySelector('#demo > .v4-home') ? 'home' :
       document.querySelector('#demo > .v4-control.expression') ? 'expression' : 'default';
     theme.content = page === 'home' ? '#ffd9e0' : page === 'expression' ? '#ffdadd' : '#f9f7f5';
+    document.documentElement.classList.remove('air2-page-home', 'air2-page-expression', 'air2-page-default');
+    document.documentElement.classList.add('air2-page-' + page);
   }
   new MutationObserver(syncSystemBarColor).observe(document.getElementById('demo'), {childList:true,subtree:false,attributes:true});
 
