@@ -23,7 +23,7 @@
     /* WebKit bug 254868: in installed apps with viewport-fit=cover, svh,
        dvh and visualViewport can exclude the safe areas. Traditional 100vh
        is the documented working fallback for standalone mode. */
-    var standaloneHeight = standalone ? standaloneViewportProbe.getBoundingClientRect().height : 0;
+    var standaloneHeight = standalone ? Math.max(window.innerHeight || 0, document.documentElement.clientHeight || 0) : 0;
     return {
       width: viewport ? viewport.width : window.innerWidth,
       /* visualViewport can exclude the iOS bottom safe area after
@@ -41,7 +41,18 @@
       ? viewport.width / designWidth
       : Math.min(viewport.width / designWidth, viewport.height / designHeight);
     scale = Math.max(.1, scale);
-    shell.style.setProperty('--air2-scale', String(scale));
+    /* A transformed ancestor traps position:fixed descendants in WebKit.
+       Installed mode therefore uses layout zoom instead of transform scaling,
+       allowing the bottom dock/nav to attach to the real screen viewport. */
+    if (standalone && isPhone) {
+      shell.style.setProperty('--air2-scale', '1');
+      demo.style.transform = 'none';
+      demo.style.zoom = String(scale);
+    } else {
+      shell.style.setProperty('--air2-scale', String(scale));
+      demo.style.transform = '';
+      demo.style.zoom = '';
+    }
     shell.style.setProperty('--air2-shell-width', (isPhone ? viewport.width : designWidth * scale) + 'px');
     shell.style.setProperty('--air2-shell-height', (isPhone ? viewport.height : designHeight * scale) + 'px');
     /* On phones, preserve the 402px design width while extending the logical

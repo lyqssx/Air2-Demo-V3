@@ -82,14 +82,19 @@ html {
   html.air2-standalone body,
   html.air2-standalone #air2-phone-shell {
     width: 100vw !important;
-    height: 100vh !important;
-    min-height: 100vh !important;
+    height: 100% !important;
+    min-height: 100% !important;
     overflow: hidden !important;
   }
 
   html.air2-standalone #air2-phone-shell {
     position: fixed !important;
     inset: 0 !important;
+  }
+
+  html.air2-standalone #demo {
+    transform: none !important;
+    transform-origin: top left !important;
   }
 
   /* WebKit standalone + viewport-fit bug: absolute bottom:0 may resolve above
