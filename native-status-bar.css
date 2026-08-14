@@ -111,7 +111,10 @@ html {
   html.air2-standalone #demo .v4-nav,
   html.air2-standalone #demo .d4-nav {
     position: fixed !important;
-    bottom: max(8px, env(safe-area-inset-bottom, 0px)) !important;
+    bottom: 0 !important;
+    height: calc(63px + env(safe-area-inset-bottom, 0px)) !important;
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+    border-radius: 31px 31px 0 0 !important;
   }
 
   html.air2-standalone #demo .v4-control > .v4-start,
