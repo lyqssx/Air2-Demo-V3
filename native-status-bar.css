@@ -77,18 +77,41 @@ html {
 
 /* Installed iOS Home Screen Web App: use one fixed, full-screen containing
    block. Native status and home-indicator areas are part of this canvas. */
-@media (display-mode: standalone) and (max-width: 600px) {
-  html,
-  body,
-  #air2-phone-shell {
+@media (max-width: 600px) {
+  html.air2-standalone,
+  html.air2-standalone body,
+  html.air2-standalone #air2-phone-shell {
     width: 100vw !important;
-    height: 100dvh !important;
-    min-height: 100dvh !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
     overflow: hidden !important;
   }
 
-  #air2-phone-shell {
+  html.air2-standalone #air2-phone-shell {
     position: fixed !important;
     inset: 0 !important;
+  }
+
+  /* WebKit standalone + viewport-fit bug: absolute bottom:0 may resolve above
+     the physical bottom. Fixed positioning uses the actual screen edge. */
+  html.air2-standalone #demo .v4-home-dock,
+  html.air2-standalone #demo .h7-home-dock,
+  html.air2-standalone #demo .home-dock {
+    position: fixed !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+  }
+
+  html.air2-standalone #demo .v4-nav,
+  html.air2-standalone #demo .d4-nav {
+    position: fixed !important;
+    bottom: max(8px, env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  html.air2-standalone #demo .v4-control > .v4-start,
+  html.air2-standalone #demo .v4-control > .v4-actions {
+    position: fixed !important;
+    bottom: max(8px, env(safe-area-inset-bottom, 0px)) !important;
   }
 }
