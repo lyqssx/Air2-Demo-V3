@@ -17,6 +17,13 @@ body,
   max-width: 100%;
 }
 
+html {
+  --air2-safe-top: env(safe-area-inset-top, 0px);
+  --air2-safe-right: env(safe-area-inset-right, 0px);
+  --air2-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --air2-safe-left: env(safe-area-inset-left, 0px);
+}
+
 @media (max-width: 600px) {
   html,
   body {
@@ -40,5 +47,30 @@ body,
   /* Home owns the status-bar backdrop, so its pink wash is continuous. */
   #demo > .v4-home {
     background: linear-gradient(180deg,#ffd9e0 0,#f9f7f5 33%) !important;
+  }
+
+  /* Fixed bottom surfaces must paint through the home-indicator safe area. */
+  #demo .v4-home-dock,
+  #demo .h7-home-dock,
+  #demo .home-dock {
+    padding-bottom: var(--air2-safe-bottom) !important;
+    height: calc(166px + var(--air2-safe-bottom)) !important;
+  }
+
+  #demo .v4-nav,
+  #demo .d4-nav {
+    bottom: max(18px, calc(var(--air2-safe-bottom) + 8px)) !important;
+  }
+
+  #demo .v4-control > .v4-start,
+  #demo .v4-control > .v4-actions {
+    bottom: max(25px, calc(var(--air2-safe-bottom) + 8px)) !important;
+  }
+
+  #demo .v4-log,
+  #demo .v4-logged,
+  #demo .r2-log,
+  #demo .v4-overlay {
+    padding-bottom: var(--air2-safe-bottom) !important;
   }
 }

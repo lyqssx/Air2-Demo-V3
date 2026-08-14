@@ -8,9 +8,14 @@
   shell.appendChild(demo);
   function viewportSize() {
     var viewport = window.visualViewport;
+    var safeBottom = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--air2-safe-bottom')) || 0;
+    var visualHeight = viewport ? viewport.height + viewport.offsetTop : 0;
     return {
       width: viewport ? viewport.width : window.innerWidth,
-      height: viewport ? viewport.height : window.innerHeight
+      /* visualViewport can exclude the iOS bottom safe area after
+         viewport-fit=cover. Use the largest available layout measurement and
+         explicitly include the safe inset so the bottom dock is not clipped. */
+      height: Math.max(visualHeight + safeBottom, window.innerHeight || 0, document.documentElement.clientHeight || 0)
     };
   }
   function resizePhone() {
