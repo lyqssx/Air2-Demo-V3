@@ -1,0 +1,44 @@
+/*
+ * The demo is presented on a real phone, whose native status bar already
+ * provides the time, cellular, Wi-Fi, and battery indicators.
+ */
+.status,
+.v4-status,
+.d4-status {
+  display: none !important;
+}
+
+/* Full-bleed iOS safe-area presentation. The native status bar remains
+   visible while the active screen background continues underneath it. */
+html,
+body,
+#air2-phone-shell,
+#demo {
+  max-width: 100%;
+}
+
+@media (max-width: 600px) {
+  html,
+  body {
+    width: 100%;
+    min-height: 100dvh;
+    background: #f9f7f5;
+  }
+
+  #air2-phone-shell {
+    top: 0 !important;
+    min-height: 100dvh;
+  }
+
+  #demo,
+  #demo > .v4,
+  #demo > .screen,
+  #demo > .d4-device {
+    min-height: 100%;
+  }
+
+  /* Home owns the status-bar backdrop, so its pink wash is continuous. */
+  #demo > .v4-home {
+    background: linear-gradient(180deg,#ffd9e0 0,#f9f7f5 33%) !important;
+  }
+}
