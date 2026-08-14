@@ -12,15 +12,17 @@
   document.body.appendChild(largeViewportProbe);
   function viewportSize() {
     var viewport = window.visualViewport;
+    var standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
     var safeBottom = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--air2-safe-bottom')) || 0;
     var visualHeight = viewport ? viewport.height + viewport.offsetTop : 0;
     var largeViewportHeight = largeViewportProbe.getBoundingClientRect().height || 0;
+    var standaloneHeight = standalone ? Math.max(window.innerHeight || 0, document.documentElement.clientHeight || 0) : 0;
     return {
       width: viewport ? viewport.width : window.innerWidth,
       /* visualViewport can exclude the iOS bottom safe area after
          viewport-fit=cover. Use the largest available layout measurement and
          explicitly include the safe inset so the bottom dock is not clipped. */
-      height: Math.max(largeViewportHeight, visualHeight + safeBottom, window.innerHeight || 0, document.documentElement.clientHeight || 0)
+      height: Math.max(largeViewportHeight, visualHeight + safeBottom, standaloneHeight, window.innerHeight || 0, document.documentElement.clientHeight || 0)
     };
   }
   function resizePhone() {
@@ -36,6 +38,7 @@
     /* On phones, preserve the 402px design width while extending the logical
        canvas to exactly the visible browser height. */
     shell.style.setProperty('--air2-canvas-height', (isPhone ? viewport.height / scale : designHeight) + 'px');
+    shell.dataset.displayMode = (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) ? 'standalone' : 'browser';
   }
   resizePhone();
   window.addEventListener('resize', resizePhone, {passive:true});

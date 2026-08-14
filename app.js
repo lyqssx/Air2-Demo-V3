@@ -1,7 +1,7 @@
 /* Let the page background extend behind the iOS status bar. The 402px design
    already reserves its own top safe spacing for the header controls. */
 const viewportMeta = document.querySelector('meta[name="viewport"]');
-if (viewportMeta) viewportMeta.content = 'width=device-width,initial-scale=1.0,viewport-fit=cover';
+if (viewportMeta) viewportMeta.content = 'width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover';
 let themeMeta = document.querySelector('meta[name="theme-color"]');
 if (!themeMeta) {
   themeMeta = document.createElement('meta');

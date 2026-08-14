@@ -74,3 +74,21 @@ html {
     padding-bottom: var(--air2-safe-bottom) !important;
   }
 }
+
+/* Installed iOS Home Screen Web App: use one fixed, full-screen containing
+   block. Native status and home-indicator areas are part of this canvas. */
+@media (display-mode: standalone) and (max-width: 600px) {
+  html,
+  body,
+  #air2-phone-shell {
+    width: 100vw !important;
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    overflow: hidden !important;
+  }
+
+  #air2-phone-shell {
+    position: fixed !important;
+    inset: 0 !important;
+  }
+}
